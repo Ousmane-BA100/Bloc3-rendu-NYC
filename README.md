@@ -92,31 +92,79 @@ Weather API (AOS)   ──>│
 
 ---
 
-## 🔮 Partie 4 : Modélisation prédictive
+## 🔮 Partie 4 : Modélisation prédictive distribuée (Dataproc + PySpark)
 
-### 🎯 Objectif  
-Prédire le **nombre de passagers** par course (`passenger_count`) selon :  
-- Variables temporelles : `hour`, `day_of_week`,  
-- Variables spatiales : `PULocationID`,  
-- Variables météo : `tmpf`, `precipitation`, `wind_speed`, `wxcodes`.
+### 🎯 Objectif
 
-### ⚙️ Pipeline ML  
-- Export d’un échantillon propre depuis BigQuery  
-- Préparation des features avec `pandas`  
-- Modèle : `RandomForestRegressor` (non-linéaire, robuste)  
-- Évaluation : RMSE, MAE sur données de test
-
-### 🧪 Résultats (prévision 1 course)  
-- **RMSE ≈ 0.85 passager**  
-- **MAE ≈ 0.62 passager**  
-- **Top variables prédictives** : `hour`, `wxcodes`, `tmpf`, `PULocationID`
-
-### 💡 Perspectives  
-- Intégration du modèle dans le pipeline Airflow  
-- API de prédiction à déployer avec GCP (Cloud Run ou Vertex AI)  
-- Affichage dans le dashboard Power BI
+Construire un **modèle prédictif du nombre de passagers (`passenger_count`)** en fonction :
+- des caractéristiques temporelles (`hour`, `day_of_week`)
+- des conditions météorologiques (`tmpf`, `precipitation`, `wind`, `wxcodes`)
+- de la localisation de prise en charge (`PULocationID`)
 
 ---
+
+### ⚙️ Architecture de modélisation
+
+```
+BigQuery (tables marts)  
+        │
+        ▼
+Dataproc (cluster Spark)  
+        │
+        ▼
+PySpark (prétraitement + entraînement MLlib)
+        │
+        ▼
+GCS (sauvegarde du modèle entraîné)
+```
+
+---
+
+### 🔁 Pipeline de Machine Learning
+
+#### 1. Chargement des données
+- Connexion directe à **BigQuery** depuis **PySpark** à l’aide du **Spark BigQuery Connector**
+- Lecture d’un échantillon nettoyé depuis les tables `marts`
+
+#### 2. Préparation des données
+- Sélection des colonnes : `hour`, `day_of_week`, `PULocationID`, `tmpf`, `precipitation`, `wxcodes`
+- Transformation via `VectorAssembler`
+- Encodage des variables catégorielles si nécessaire
+
+#### 3. Entraînement du modèle
+- Utilisation de `RandomForestRegressor` depuis **Spark MLlib**
+- Séparation des données en **80% train / 20% test**
+- Réglage de quelques hyperparamètres de base (ex. nombre d’arbres)
+
+#### 4. Évaluation
+- Calcul des métriques : `RMSE`, `MAE`, `R²`
+- Résultats loggués depuis le cluster Dataproc
+
+#### 5. Sauvegarde
+- Le modèle est sauvegardé dans un bucket **GCS** au format MLlib (`.sav`)
+- Exporté pour être utilisé localement ou déployé via API sur GCP
+
+---
+
+### 📊 Résultats obtenus
+
+| Métrique        | Valeur approximative |
+|-----------------|----------------------|
+| RMSE            | ~0.85 passager       |
+| MAE             | ~0.62 passager       |
+| Variables clés  | `hour`, `wxcodes`, `tmpf`, `PULocationID` |
+
+---
+
+### 🚀 Étapes suivantes
+
+- Intégrer le script d’entraînement dans **Airflow** via `DataprocSubmitJobOperator`
+- Export du modèle au format `.pkl` ou `.onnx` pour déploiement
+- Création d’un **endpoint API (Flask + Cloud Run)** pour rendre le modèle accessible
+- Déploiement automatisé avec **GitHub Actions (CI/CD)**
+
+---
+
 
 ## 🚦 Partie 5 : Suivi de projet et pilotage
 
