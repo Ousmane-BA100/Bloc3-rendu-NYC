@@ -1,72 +1,96 @@
-# 🚕 Yellow Taxi MeteoRide – Projet Data
+# 🚖 Yellow Taxi MeteoRide – De l’Open Data à la Prédiction
 
-> Projet fictif – Bloc 3 Ynov : Élaborer et piloter un projet Data  
-> Auteurs : Ousmane BA & collaborateur (2 Data Engineers juniors)  
-> Durée estimée : 8 semaines
-
----
-
-## 🧠 Objectif général
-
-Anticiper la demande de taxis à New York en fonction des conditions météo via :
-- Un pipeline ELT sur GCP
-- Un entrepôt de données structuré
-- Un modèle prédictif (nombre de passagers)
-- Un tableau de bord décisionnel
-- Une API déployée sur Cloud Run
+**Projet fictif** – Livrable Bloc 3  
+**Durée** : 8 semaines  
+**Participants** : Ousmane BA et collaborateur pair  
+**Contexte** : Ville de New York – Mobilité intelligente
 
 ---
 
-## 📁 Table des matières
+## 📖 Sommaire
 
-1. [🎯 Cadrage du projet](#🎯-cadrage-du-projet)  
-2. [📐 Dimensionnement](#📐-dimensionnement)  
-3. [🧱 Architecture technique](#🧱-architecture-technique)  
-4. [🔄 Pipeline détaillé](#🔄-pipeline-détaillé)  
-5. [🤖 Modélisation prédictive](#🤖-modélisation-prédictive)  
-6. [📊 Pilotage du projet](#📊-pilotage-du-projet)  
-7. [👥 Équipe & routines](#👥-équipe--routines)  
-8. [🌱 Éthique & veille](#🌱-éthique--veille)  
-9. [📦 Annexes](#📦-annexes)
+1. [Introduction & Contexte](#1-🎯-introduction--contexte)  
+2. [Cadrage du projet (A3.1)](#2-🧭-cadrage-du-projet-a31)  
+3. [Dimensionnement & faisabilité](#3-📐-dimensionnement--faisabilité)  
+4. [Architecture technique & pipeline](#4-🧱-architecture-technique--pipeline)  
+5. [Description des étapes du projet](#5-🔄-étapes-détaillées-du-projet)  
+6. [Modélisation prédictive distribuée](#6-🤖-modélisation-prédictive-distribuée)  
+7. [Pilotage et suivi du projet (A3.2)](#7-📊-pilotage-et-suivi-du-projet-a32)  
+8. [Équipe projet & routines (A3.3)](#8-👥-équipe-projet--routines-a33)  
+9. [Veille, sécurité & éthique (A3.4)](#9-🌱-veille-sécurité--éthique-a34)  
+10. [Annexes](#10-📦-annexes)
 
 ---
 
-## 🎯 Cadrage du projet
+## 1. 🎯 Introduction & Contexte
 
-### Problématique
-> Comment prédire l’activité des taxis à NYC selon les conditions météo pour optimiser la répartition et réduire les trajets à vide ?
+La ville de New York souhaite comprendre et anticiper l’impact des conditions météo sur l’activité des taxis afin d’optimiser leur répartition.
+
+Le projet **Yellow Taxi MeteoRide** vise à :
+
+- croiser données de trajets et météo,  
+- construire un entrepôt analytique automatisé (GCP),  
+- modéliser la demande en nombre de passagers,  
+- fournir une interface visuelle et une API de prédiction.
+
+---
+
+## 2. 🧭 Cadrage du projet (A3.1)
+
+### Problématique  
+> Comment prédire les variations d’activité des taxis à NYC selon les conditions météorologiques pour améliorer la répartition des véhicules et réduire les trajets à vide ?
 
 ### Objectifs
-- Croiser trajets de taxis & météo
-- Nettoyer, structurer et enrichir les données
-- Construire un modèle prédictif (nombre de passagers)
-- Mettre à disposition une API et un dashboard
+
+- Construire un pipeline ELT automatisé sur GCP  
+- Nettoyer et croiser données taxi & météo  
+- Modéliser le nombre de passagers (ML)  
+- Déployer une API de prédiction  
+- Visualiser les résultats via Power BI  
 
 ### Contraintes
-- Fichiers mensuels > 500 Mo  
-- API météo horaire (quota, fiabilité)  
-- Données massives à synchroniser
+- Volumétrie importante (fichiers mensuels > 500 Mo)  
+- Sources hétérogènes (API, CSV)  
+- API météo limitée en granularité  
+- Données non personnelles mais sensibles au bruit
 
 ### Enjeux RSE
-- Moins de trajets à vide → réduction CO₂  
-- Reproductibilité (Open Data)  
-- Pas de données personnelles → conforme RGPD
+- Réduction de l’empreinte CO₂ en optimisant les trajets  
+- Usage de données publiques, respect RGPD  
+- Approche responsable et éthique
 
 ---
 
-## 📐 Dimensionnement
+## 3. 📐 Dimensionnement & faisabilité
 
-- **Ressources humaines** : 2 Data Engineers juniors  
-- **Durée estimée** : 8 semaines  
-- **Budget fictif** : ~100€/mois sur GCP  
-- **Technos** : Airflow, BigQuery, GCS, dbt, Dataproc, Flask, Streamlit, Power BI  
-- **Faisabilité** : Données accessibles, pipeline validé, modèle entraîné
+### Ressources humaines
+- 2 Data Engineers juniors  
+- Collaboration en binôme : pipeline / modélisation / visualisation
+
+### Ressources techniques
+- GCP : GCS, BigQuery, Dataproc, Cloud Run  
+- Airflow, dbt, Power BI, Streamlit, Flask  
+- GitHub + Trello
+
+### Charge de travail estimée
+- 8 semaines, 4 grandes phases
+
+### Budget fictif
+- ~100 €/mois sur GCP (stockage, compute)  
+- Aucun coût RH (auto-formation)
+
+### Faisabilité
+- Données ouvertes et testées  
+- Scripts opérationnels en local  
+- Modèle validé sur échantillon
 
 ---
 
-## 🧱 Architecture technique
+## 4. 🧱 Architecture technique & pipeline
 
-```text
+### Pipeline global
+
+```
 NYC.gov (trips CSV) ─┐
                      ├─> Airflow (orchestration)
 Weather API (ASOS) ──┘
@@ -85,188 +109,167 @@ Dataproc (modélisation)       Power BI
       API Flask + Streamlit
               ↓
      Docker + Cloud Run (CI/CD)
+```
+
+
+---
 
 ## 5. 🔄 Étapes détaillées du projet
 
-### Semaine 1 : Extraction
-- Automatisation de l’ingestion des données taxi (fichiers mensuels CSV) via Airflow.
-- Récupération des données météo via l’API ASOS (observations horaires).
-- Stockage brut des fichiers dans Google Cloud Storage (GCS).
+### Étape 1 – Extraction (S1)
+- Ingestion automatique des fichiers taxi via Airflow  
+- Requête API ASOS (météo) → stockage CSV dans GCS
 
-### Semaine 2 : Chargement
-- Chargement des fichiers brut dans BigQuery (2 tables : `raw_taxi_trips` et `raw_weather_data`).
-- Contrôles de qualité : format, complétude, détection de doublons.
+### Étape 2 – Chargement (S2)
+- Données brutes stockées dans GCS  
+- Ingestion dans BigQuery via Airflow → 2 tables `raw_taxi`, `raw_weather`
 
-### Semaine 3 : Transformation
-- Utilisation de dbt pour :
-  - Nettoyer les nulls, uniformiser les formats (dates, température, ID zones).
-  - Créer des dimensions temporelles.
-  - Mapper les stations météo aux zones taxi.
-- Création de tables marts prêtes pour modélisation et visualisation.
+### Étape 3 – Transformation (S3)
+- dbt : typage, suppression nulls, enrichissement  
+- Jointure taxi ↔ météo (via `pickup_hour` et `station_id`)  
+- Création des tables `marts` prêtes pour BI et ML
 
-### Semaine 4–5 : Visualisation (Power BI)
-- Connexion Power BI à BigQuery pour visualisation en temps réel.
-- Création d’un tableau de bord interactif :
-  - Nombre moyen de passagers par heure/jour.
-  - Influence de la météo.
-  - Carte des zones de forte activité.
+### Étape 4 – Visualisation (S4–S5)
+- Connexion BigQuery → Power BI  
+- Mise en place des filtres (zone, météo, jour)  
+- Intégration de KPIs clés : volume courses, moyenne passagers, météo dominante
 
-### Semaine 6 : Modélisation prédictive
-- Export des données depuis BigQuery via Spark-BigQuery Connector.
-- Prétraitement et entraînement sur Dataproc avec PySpark.
-- Modèle : `RandomForestRegressor`.
-- Évaluation du modèle (RMSE ≈ 0.85, MAE ≈ 0.62).
-- Sauvegarde du modèle dans GCS.
+### Étape 5 – Modélisation (S6)
+- Lecture des données via Spark-BigQuery connector  
+- Préparation des variables d’entrée  
+- Entraînement sur Dataproc (PySpark + RandomForest)  
+- Évaluation RMSE/MAE et export du modèle dans GCS
 
-### Semaine 7 : Développement API et interface
-- Création d’une API Flask pour exposer le modèle.
-- Création d’une interface Streamlit pour tester les prédictions.
-- Conteneurisation avec Docker.
-
-### Semaine 8 : Déploiement
-- Déploiement de l’API et de l’interface sur **GCP Cloud Run**.
-- Mise en place du CI/CD avec **GitHub Actions**.
-- Tests de bout en bout sur environnement cloud.
+### Étape 6 – Déploiement modèle (S7–S8)
+- API REST construite avec Flask (serveur local)  
+- Interface Streamlit pour test utilisateur  
+- Dockerisation complète (backend + frontend)  
+- Déploiement via Cloud Run (GCP) avec GitHub Actions
 
 ---
 
-## 6. 🤖 Modélisation prédictive
+## 6. 🤖 Modélisation prédictive distribuée
 
 ### Objectif
-Prédire le `passenger_count` (nombre de passagers) à partir de caractéristiques contextuelles, temporelles et météorologiques.
 
-### Exemples de variables utilisées (features) :
-- **hour** : heure de la course (0–23)
-- **is_business_day** : jour ouvré ou non (1 = oui, 0 = non)
-- **weather** : indice météo (0 = clair, 1 = pluie)
-- **temp_avg** : température moyenne en °C
-- **PULocationID** : zone géographique de départ
-- **wxcodes** : code météo détaillé (brume, orage, etc.)
+Prédire le nombre de passagers (`passenger_count`) à partir de :
 
-### Résultats :
+- **Hour** : influence des heures de pointe  
+- **Is_business_day** : trafic différent week-end/semaine  
+- **Weather** : pluie, vent, conditions extrêmes  
+- **Temp_avg** : corrélé à la fréquentation  
+- **PULocationID** : effet zone géographique  
+
+### Résultats
+
 - RMSE ≈ 0.85  
 - MAE ≈ 0.62  
-- Top variables : `hour`, `temp_avg`, `wxcodes`, `PULocationID`
+- Top prédicteurs : `hour`, `tmpf`, `PULocationID`, `wxcodes`
 
 ### Technologies utilisées
 
-#### 🖥️ Backend :
-- Flask 🐍 : API REST de prédiction
-- PySpark ⚡ : entraînement du modèle sur Dataproc
-- Docker 🐳 : conteneurisation du service
+**Backend** :  
+- Flask 🐍 : API REST  
+- PySpark ⚡ : Modèle de prédiction  
+- Docker 🐳 : Conteneurisation  
 
-#### 🎨 Frontend :
-- Streamlit 🎨 : interface utilisateur
-- Docker 🐳 : conteneurisation
+**Frontend** :  
+- Streamlit 🎨 : Interface utilisateur  
+- Docker 🐳 : Conteneurisation  
 
-#### 🔧 Autres :
-- Git 🔗 : versionnement
-- Docker Compose ⚙️ : orchestration multi-services
+**Autres outils** :  
+- Git 🔗 : Versionnement  
+- Docker Compose ⚙️ : Multi-services
 
 ---
 
-## 7. 📊 Pilotage du projet
+## 7. 📊 Pilotage et suivi du projet (A3.2)
 
 ### Méthodologie
-- **Méthode Agile – Scrum simplifié**
-- Outil de gestion : **Trello**
-- Organisation par sprints hebdomadaires
-- Suivi des tâches : À faire → En cours → Terminé
-- Réunions hebdomadaires (bilan + ajustements)
+
+- **Agile / Scrum**  
+- Outil de suivi : **Trello**  
+- Sprints hebdomadaires avec planning  
+- Réunions 1 à 2 fois par semaine (revue + planification)
 
 ### Planning prévisionnel (8 semaines)
 
 | Semaine   | Activité principale                                     |
 |-----------|----------------------------------------------------------|
-| Semaine 1 | Extraction (Airflow + API météo)                         |
-| Semaine 2 | Chargement GCS → BigQuery (tables raw)                   |
-| Semaine 3 | Transformation via dbt (tables marts)                    |
-| Semaine 4 | Construction du dashboard Power BI                       |
-| Semaine 5 | Finalisation des visualisations et mise en forme         |
-| Semaine 6 | Modélisation avec PySpark sur Dataproc                   |
-| Semaine 7 | Création de l’API Flask et de l’interface Streamlit      |
-| Semaine 8 | Déploiement sur Cloud Run + CI/CD GitHub Actions         |
+| Semaine 1 | Extraction des données taxi et météo                     |
+| Semaine 2 | Chargement + création des tables `raw`                   |
+| Semaine 3 | Nettoyage et transformation avec dbt                     |
+| Semaine 4 | Début du dashboard Power BI (structure, connexion)       |
+| Semaine 5 | Finalisation du dashboard et publication                 |
+| Semaine 6 | Modélisation prédictive sur Dataproc                     |
+| Semaine 7 | Développement de l’API Flask + interface Streamlit       |
+| Semaine 8 | Dockerisation + déploiement via Cloud Run + CI/CD        |
 
-### Indicateurs de performance
-- Taux de succès des DAGs Airflow
-- Qualité des données transformées
-- Performance du modèle (RMSE, MAE)
-- Complétude des dashboards Power BI
-- Nombre de tâches terminées vs prévues sur Trello
+### Indicateurs de pilotage
 
----
-
-## 8. 👥 Équipe & routines
-
-### Composition de l’équipe
-- **2 Data Engineers Juniors**
-  - Profil 1 : pipeline, BigQuery, visualisation
-  - Profil 2 : modélisation, API, déploiement
-
-### Montée en compétence
-- Auto-formation sur :
-  - GCP (BigQuery, Dataproc, Cloud Run)
-  - dbt, Airflow, Flask, Streamlit
-- Utilisation de la documentation officielle et de tutoriels spécialisés
-
-### Routines projet
-- **Daily async** sur Trello
-- **Sprint review hebdomadaire**
-- **Partage de démos et captures d’écran**
-- **Feedback croisé** entre les membres de l’équipe
+- Taux de succès des DAGs  
+- RMSE/MAE du modèle  
+- % d'avancement des tâches sur Trello  
+- Couverture fonctionnelle du dashboard
 
 ---
 
-## 9. 🌱 Éthique & veille
+## 8. 👥 Équipe projet & routines (A3.3)
+
+### Composition
+
+- **2 Data Engineers juniors**  
+  - Membre 1 : Extraction, BigQuery, dbt, Power BI  
+  - Membre 2 : Modélisation, API Flask, Streamlit, CI/CD
+
+### Routines
+
+- **Daily async** sur Trello  
+- **Sprint planning** en début de semaine  
+- **Sprint review** chaque fin de semaine  
+- Démo technique hebdomadaire (Airflow UI, modèle, dashboard)
+
+---
+
+## 9. 🌱 Veille, sécurité & éthique (A3.4)
 
 ### Veille technologique
-- BigQuery ML, dbt v1.6, Spark 3.5
-- GCP Data products : Vertex AI, Looker Studio
-- Sources : Medium, TowardsDataScience, blogs GCP
 
-### Veille réglementaire
-- Respect RGPD : aucune donnée personnelle
-- Stockage sécurisé sur GCP
-- Gouvernance des accès : credentials sécurisés
+- Suivi de l’évolution : dbt, GCP, Spark, Power BI  
+- Sources : Medium, newsletters Data, GCP changelog
 
-### Enjeux RSE
-- Optimisation de la mobilité = réduction CO₂
-- Exploitation d’Open Data pour l’intérêt général
-- Système reproductible, transparent et responsable
+### Réglementation
+
+- Respect du RGPD : aucune donnée personnelle  
+- Stockage sur GCP (ISO/IEC certifié)  
+- APIs sécurisées (clé privée + accès restreint)
+
+### RSE / Éthique
+
+- Objectif CO₂ : moins de trajets à vide  
+- Projet 100% Open Data  
+- Gouvernance responsable : accès contrôlés, déploiement sécurisé
 
 ---
 
 ## 10. 📦 Annexes
 
-- 📸 Captures d’écran :
-  - DAG Airflow
-  - Tables BigQuery
-  - Dashboard Power BI
-  - Interface Streamlit
-
-- 📁 Fichiers :
-  - `dbt_project.yml`
-  - `docker-compose.yml`
-  - Script d’entraînement PySpark
-  - Script API Flask
-
-- 🔗 Liens :
-  - [GitHub du projet](#)
-  - [Trello export](#)
-  - [Vidéo démo (optionnel)](#)
+- Schéma pipeline ELT (png/pdf)  
+- Captures : Airflow DAG, BigQuery tables, dbt model  
+- Planning Trello exporté  
+- Extraits : dbt config, Dockerfile, API test  
+- Lien GitHub ou dépôt zip (structure projet)
 
 ---
 
 ## ✅ Conclusion
 
-Ce projet fictif a permis de démontrer la capacité à :
+Le projet Yellow Taxi MeteoRide démontre la capacité à :
 
-- Structurer un projet Data de bout en bout (ELT → Modèle → API)
-- Utiliser efficacement les services GCP
-- Mettre en place une modélisation prédictive distribuée
-- Créer une application déployable, maintenable et visualisable
-
-**Yellow Taxi MeteoRide** est un projet à visée pédagogique mais réaliste, aligné sur les attentes d’un Data Engineer moderne.
+- piloter un projet Data de bout en bout,  
+- mettre en œuvre un pipeline Cloud moderne,  
+- livrer un modèle prédictif et une API exploitable,  
+- intégrer éthique, documentation et méthodologie projet.
 
 ---
 
