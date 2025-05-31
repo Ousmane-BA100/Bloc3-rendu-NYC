@@ -1,4 +1,5 @@
-# 🚖 Yellow Taxi MeteoRide – De l’Open Data à la Prédiction
+# 🚖 Projet fictif – Optimisation des courses de taxis jaunes New York City par la data
+**(ELT + modélisation de la demande client)**
 
 **Projet fictif** – Livrable Bloc 3  
 **Durée** : 8 semaines  
@@ -24,14 +25,20 @@
 
 ## 1. 🎯 Introduction & Contexte
 
-La ville de New York souhaite comprendre et anticiper l’impact des conditions météo sur l’activité des taxis afin d’optimiser leur répartition.
+Une entreprise fictive qui gère une large flotte de **taxis jaunes à New York** souhaite tirer parti de ses données pour améliorer ses performances opérationnelles.  
+L’objectif du projet est de **prédire la demande client**, c’est-à-dire **modéliser le nombre de passagers attendus**, en fonction des **conditions météorologiques et temporelles**, dans le but de :
 
-Le projet **Yellow Taxi MeteoRide** vise à :
+- **maximiser les bénéfices** en adaptant dynamiquement l’offre à la demande,  
+- **réduire les coûts** d’exploitation liés aux trajets à vide ou mal répartis,  
+- **améliorer le service client** par une meilleure anticipation des pics d’activité,  
+- **limiter les émissions de CO₂** grâce à une allocation plus efficiente des véhicules.
 
-- croiser données de trajets et météo,  
-- construire un entrepôt analytique automatisé (GCP),  
-- modéliser la demande en nombre de passagers,  
-- fournir une interface visuelle et une API de prédiction.
+Le projet **Yellow Taxi MeteoRide** s’inscrit dans cette stratégie data-driven en s'appuyant sur :  
+- un pipeline ELT automatisé (Airflow, GCS, BigQuery, dbt),  
+- une couche analytique pour la visualisation (Power BI),  
+- une brique prédictive (modèle ML sur Dataproc),  
+- et un déploiement API (Cloud Run) pour l'exploitation des prédictions.
+
 
 ---
 
